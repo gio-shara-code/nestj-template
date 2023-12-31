@@ -1,0 +1,39 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["auth", "profiles"]
+}
+
+enum AuthenticationMethod {
+  EMAIL
+  TELEGRAM
+
+  @@schema("auth")
+}
+
+model AuthBase {
+  id                   String               @id @default(cuid())
+  password             String?
+  authenticationMethod AuthenticationMethod
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  ProfileBase          ProfileBase[]
+
+  @@map("base")
+  @@schema("auth")
+}
+
+model ProfileBase {
+  id    String    @id @default(cuid())
+  name  String?
+  email String    @unique
+  auth  AuthBase? @relation(fields: [id], references: [id])
+
+  @@map("base")
+  @@schema("profiles")
+}
