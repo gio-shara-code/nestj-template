@@ -85,13 +85,12 @@ heroku create
 ### Local development database
 For local development db you can either use these following options:
 ```bash
-pnpm prisma migrate dev --name init
+pnpm dotenv -e .env.dev -- pnpm prisma migrate dev --name <dev_name>
 ```
 or
 ```bash
 pnpm prisma db push
 ```
-
 
 ### Production database
 ```bash
