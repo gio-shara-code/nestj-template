@@ -93,7 +93,7 @@ pnpm prisma db push
 ```
 
 
-Deploy the migrations
+### Production database
 ```bash
 pnpm prisma migrate deploy
 ```
