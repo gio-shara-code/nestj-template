@@ -35,9 +35,6 @@ $ pnpm run test:e2e
 $ pnpm run test:cov
 ```
 
-## Stay in touch
-- Author Linked - [Giorgi Sharashendize](https://www.linkedin.com/in/giorgi-sharashenidze-3bb9311a0/)
-
 ## Endpoints
 - POST /auth/register 
 - POST /auth/login
