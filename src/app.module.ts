@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { ProfileBaseModule } from './profileBase.module';
-import { PrismaService } from './prisma.service';
-import { AuthBaseModule } from './authBase.module';
+import { ProfileBaseModule } from './profile/profileBase.module';
+import { PrismaService } from './services/prisma.service';
+import { AuthBaseModule } from './auth/authBase.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { ConfigModule } from '@nestjs/config';
 import * as process from 'process';
+import env from './config/env';
+import { JwtModule } from '@nestjs/jwt';
 
 console.log('node_env', process.env.NODE_ENV);
 
@@ -19,12 +21,15 @@ console.log('node_env', process.env.NODE_ENV);
     ]),
     ConfigModule.forRoot({
       isGlobal: true,
-      expandVariables: true,
-      envFilePath:
-        process.env.NODE_ENV === 'production' ? '.env.prod' : 'env.dev',
+      load: [env],
     }),
     ProfileBaseModule,
     AuthBaseModule,
+    JwtModule.register({
+      global: true,
+      secret: env().JWT_SECRET_KEY,
+      // signOptions: { expiresIn: '60s' },
+    }),
   ],
   controllers: [AppController],
   providers: [PrismaService],
