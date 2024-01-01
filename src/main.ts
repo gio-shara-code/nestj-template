@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { VersioningType } from '@nestjs/common';
 import helmet from 'helmet';
-import * as process from 'process';
+import env from './config/env';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -29,9 +29,9 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  if (process.env.NODE_ENV === 'development')
+  if (env().NODE_ENV === 'development')
     SwaggerModule.setup('api', app, document);
-  await app.listen(process.env.PORT || 3000);
+  await app.listen(env().PORT);
 }
 
 bootstrap();
