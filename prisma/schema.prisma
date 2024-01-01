@@ -18,22 +18,47 @@ enum AuthenticationMethod {
 
 model AuthBase {
   id                   String               @id @default(cuid())
+  email                String?              @unique
   password             String?
   authenticationMethod AuthenticationMethod
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @updatedAt
-  ProfileBase          ProfileBase[]
+  profileBases         ProfileBase[]
 
   @@map("base")
   @@schema("auth")
 }
 
 model ProfileBase {
-  id    String    @id @default(cuid())
-  name  String?
-  email String    @unique
-  auth  AuthBase? @relation(fields: [id], references: [id])
+  id               String            @id @default(cuid())
+  name             String?
+  auth             AuthBase?         @relation(fields: [id], references: [id])
+  profileTelegrams ProfileTelegram[]
 
   @@map("base")
   @@schema("profiles")
+}
+
+model ProfileTelegram {
+  id                  Int                  @id
+  firstName           String?
+  lastName            String?
+  username            String?
+  photoUrl            String?
+  profileBase         ProfileBase?         @relation(fields: [profileBaseId], references: [id])
+  profileBaseId       String?
+  authInvitationCodes AuthInvitationCode[]
+
+  @@map("telegram")
+  @@schema("profiles")
+}
+
+model AuthInvitationCode {
+  id                String          @id @default(cuid())
+  code              String          @unique
+  telegramId        Int
+  profileTelegramId ProfileTelegram @relation(fields: [telegramId], references: [id])
+
+  @@map("invitation_code")
+  @@schema("auth")
 }
