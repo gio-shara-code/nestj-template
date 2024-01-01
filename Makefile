@@ -18,7 +18,7 @@ set-env:
 
 
 prisma-dev:
-	@pnpm dotenv -e .env.development -- pnpm prisma migrate dev --name $(name)
+	@pnpm dotenv -e .env.dev -- pnpm prisma migrate dev --name $(name)
 
 prisma-deploy:
 	@prisma migrate deploy
